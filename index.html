@@ -42,7 +42,7 @@
 </head>
 <body>
   <header>
-    <h1>Power BI Report — Managed Identity Embed (.NET 8)</h1>
+    <h1>Power BI Dashboard — Managed Identity Embed (.NET 8)</h1>
   </header>
 
   <div class="container">
@@ -51,7 +51,7 @@
   </div>
 
   <script>
-    async function loadReport() {
+    async function loadDashboard() {
       const statusEl = document.getElementById("status");
       try {
         const resp = await fetch("/api/getEmbedInfo");
@@ -59,28 +59,25 @@
         const data = await resp.json();
 
         const config = {
-          type: "report",
+          type: "dashboard",
           tokenType: window["powerbi-client"].models.TokenType.Embed,
           accessToken: data.embedToken,
           embedUrl: data.embedUrl,
-          id: data.reportId,
-          settings: {
-            panes: { filters: { visible: false } },
-          },
+          id: data.dashboardId,
         };
 
         const container = document.getElementById("reportContainer");
         const powerbiService = window.powerbi;
         powerbiService.embed(container, config);
 
-        statusEl.textContent = "Report loaded successfully via Managed Identity.";
+        statusEl.textContent = "Dashboard loaded successfully via Managed Identity.";
       } catch (err) {
-        statusEl.textContent = "Failed to load report: " + err.message;
+        statusEl.textContent = "Failed to load dashboard: " + err.message;
         console.error(err);
       }
     }
 
-    window.addEventListener("load", loadReport);
+    window.addEventListener("load", loadDashboard);
   </script>
 </body>
 </html>
