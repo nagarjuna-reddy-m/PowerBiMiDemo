@@ -1,83 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Power BI Secure Embed (Managed Identity)</title>
-  <script src="https://cdn.jsdelivr.net/npm/powerbi-client@2.23.1/dist/powerbi.min.js"></script>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Segoe UI, Arial, sans-serif;
-      background: #f3f2f1;
-      color: #201f1e;
-    }
-    header {
-      background: #0078d4;
-      color: white;
-      padding: 16px 24px;
-    }
-    header h1 { margin: 0; font-size: 20px; }
-    .container {
-      max-width: 1100px;
-      margin: 24px auto;
-      padding: 0 16px;
-    }
-    #status {
-      background: white;
-      border: 1px solid #e1dfdd;
-      border-radius: 4px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      font-size: 14px;
-    }
-    #reportContainer {
-      height: 600px;
-      background: white;
-      border: 1px solid #e1dfdd;
-      border-radius: 4px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        Power BI Dashboard - Managed Identity
+    </title>
+
+    /npm/powerbi-client@2.23.1/dist/powerbi.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Segoe UI, Arial, sans-serif;
+            background: #f3f2f1;
+            color: #201f1e;
+        }
+
+        header {
+            background: #0078d4;
+            color: white;
+            padding: 16px 24px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        #status {
+            background: white;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+        }
+
+        #dashboardContainer {
+            height: 800px;
+            background: white;
+            border: 1px solid #e1dfdd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
+
 <body>
-  <header>
-    <h1>Power BI Dashboard — Managed Identity Embed (.NET 8)</h1>
-  </header>
 
-  <div class="container">
-    <div id="status">Loading embed token from server...</div>
-    <div id="reportContainer"></div>
-  </div>
+    <header>
+        <h1>
+            Power BI Dashboard - Managed Identity
+        </h1>
+    </header>
 
-  <script>
-    async function loadDashboard() {
-      const statusEl = document.getElementById("status");
-      try {
-        const resp = await fetch("/api/getEmbedInfo");
-        if (!resp.ok) throw new Error("Server returned " + resp.status);
-        const data = await resp.json();
+    <div class="container">
 
-        const config = {
-          type: "dashboard",
-          tokenType: window["powerbi-client"].models.TokenType.Embed,
-          accessToken: data.embedToken,
-          embedUrl: data.embedUrl,
-          id: data.dashboardId,
-        };
+        <div id="status">
+            Loading dashboard...
+        </div>
 
-        const container = document.getElementById("reportContainer");
-        const powerbiService = window.powerbi;
-        powerbiService.embed(container, config);
+        <div id="dashboardContainer"></div>
 
-        statusEl.textContent = "Dashboard loaded successfully via Managed Identity.";
-      } catch (err) {
-        statusEl.textContent = "Failed to load dashboard: " + err.message;
-        console.error(err);
-      }
-    }
+    </div>
 
-    window.addEventListener("load", loadDashboard);
-  </script>
+    <script>
+
+        async function loadDashboard() {
+
+            const statusEl =
+                document.getElementById("status");
+
+            try {
+
+                const resp =
+                    await fetch("/api/getEmbedInfo");
+
+                if (!resp.ok) {
+                    throw new Error(
+                        "Server returned " +
+                        resp.status);
+                }
+
+                const data =
+                    await resp.json();
+
+                const config = {
+
+                    type: "dashboard",
+
+                    tokenType:
+                        window["powerbi-client"]
+                            .models
+                            .TokenType
+                            .Embed,
+
+                    accessToken:
+                        data.embedToken,
+
+                    embedUrl:
+                        data.embedUrl,
+
+                    id:
+                        data.dashboardId
+                };
+
+                const container =
+                    document.getElementById(
+                        "dashboardContainer");
+
+                const powerbiService =
+                    window.powerbi;
+
+                powerbiService.embed(
+                    container,
+                    config);
+
+                statusEl.textContent =
+                    "Dashboard loaded successfully.";
+
+            }
+            catch (err) {
+
+                statusEl.textContent =
+                    "Failed to load dashboard: " +
+                    err.message;
+
+                console.error(err);
+            }
+        }
+
+        window.addEventListener(
+            "load",
+            loadDashboard);
+
+    </script>
+
 </body>
+
 </html>
