@@ -13,23 +13,28 @@ app.UseStaticFiles();
 string workspaceId = builder.Configuration["PBI_WORKSPACE_ID"] ?? "YOUR_WORKSPACE_ID";
 string reportId = builder.Configuration["PBI_REPORT_ID"] ?? "YOUR_REPORT_ID";
 // If using a User-Assigned Managed Identity, set its Client ID here (or leave null for System-Assigned)
-string tenantId = builder.Configuration["TenantId"]
-    ?? throw new Exception("TenantId missing");
+// string tenantId = builder.Configuration["TenantId"]
+    // ?? throw new Exception("TenantId missing");
 
-string clientId = builder.Configuration["ClientId"]
-    ?? throw new Exception("ClientId missing");
+// string clientId = builder.Configuration["ClientId"]
+    // ?? throw new Exception("ClientId missing");
 
-string clientSecret = builder.Configuration["ClientSecret"]
-    ?? throw new Exception("ClientSecret missing");
+// string clientSecret = builder.Configuration["ClientSecret"]
+    // ?? throw new Exception("ClientSecret missing");
 // --------------------------------------------------------------------------------------------
 
 const string PowerBiResource = "https://analysis.windows.net/powerbi/api/.default";
 const string PowerBiApiBase = "https://api.powerbi.com/v1.0/myorg";
 
-var credential = new ClientSecretCredential(
-    tenantId,
-    clientId,
-    clientSecret);
+
+
+var credential = new ManagedIdentityCredential();
+
+
+// var credential = new ClientSecretCredential(
+//   tenantId,
+ //   clientId,
+   // clientSecret); 
 
 var httpClient = new HttpClient();
 
